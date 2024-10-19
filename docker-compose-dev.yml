@@ -1,0 +1,31 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    command: >
+      sh -c "python wait_for_db.py &&
+            python manage.py makemigrations --noinput &&
+            python manage.py migrate --noinput &&
+            python manage.py createinitialsuperuser &&
+            python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_TIME_ZONE: Europe/Warsaw
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      DJANGO_SETTINGS_MODULE: "core.settings"
+      DJANGO_SECRET_KEY: "your-secret-key-here"
+      DEBUG: "True"
+      ALLOWED_HOSTS: "localhost,192.168.0.29,0.0.0.0,127.0.0.1,[::1]"
+
+    volumes:
+      - .:/app
+
+      - sqlite_data:/db
+      
+volumes:
+  sqlite_data:
+

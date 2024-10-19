@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}
+      <!-- Additional meta tags can be added here -->
+    {% endblock meta %}
+    <title>
+      {% block title %}
+        <!-- Page Title -->
+        Copier App Template
+      {% endblock title %}
+    </title>
+    <!-- Stylesheets -->
+    {% block stylesheets %}
+      <link rel="stylesheet" href="{% static 'css/main.css' %}">
+      <!-- Additional default CSS files can be added here -->
+    {% endblock stylesheets %}
+    {% block extracss %}
+      <!-- Extra CSS specific to a page can be added here -->
+    {% endblock extracss %}
+    <!-- Extra Head Content -->
+    {% block extrahead %}
+      <!-- Additional head content (e.g., scripts, meta tags) -->
+    {% endblock extrahead %}
+  </head>
+  <body>
+    <!-- Header -->
+    {% block header %}
+      <!-- Optional header content -->
+    {% endblock header %}
+    <!-- Navigation Bar -->
+    {% block navbar %}
+      <!-- Default navbar content -->
+    {% endblock navbar %}
+    <!-- Main Content -->
+    <main>
+      {% block content %}
+        <!-- Page-specific content goes here -->
+      {% endblock content %}
+    </main>
+    <!-- Footer -->
+    {% block footer %}
+      <!-- Optional footer content -->
+    {% endblock footer %}
+    <!-- Scripts -->
+    {% block scripts %}
+      <!-- Default JavaScript files -->
+    {% endblock scripts %}
+    {% block extrajs %}
+      <!-- Extra JavaScript specific to a page can be added here -->
+    {% endblock extrajs %}
+  </body>
+</html>
