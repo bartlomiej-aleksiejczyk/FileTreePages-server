@@ -12,7 +12,7 @@ DEFAULT_RENDERING_METHOD = "txt_render"
 
 
 def html_safe_render(node_dir, node_path, request):
-    # TODO: disable classless css here if using for page archivew
+    # TODO: disable classless css here if using for page archive
     main_html_file = os.path.join(node_dir, "main.html")
 
     if os.path.exists(main_html_file):

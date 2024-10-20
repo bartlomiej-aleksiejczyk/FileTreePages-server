@@ -23,9 +23,12 @@ services:
 
     volumes:
       - .:/app
-
       - sqlite_data:/db
-      
+
 volumes:
   sqlite_data:
-
+  nfs_data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_SHARE_IP},rw"
+      device: ":${NFS_SHARE_PATH}"
