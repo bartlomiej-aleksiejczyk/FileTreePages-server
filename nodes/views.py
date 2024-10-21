@@ -65,13 +65,15 @@ RENDERING_METHODS = {
 def render_node(request, node_path):
     node_dir = os.path.join(BASE_DIR, node_path)
     metadata_file = os.path.join(node_dir, "metadata.json")
+    rendering_method_name = None
 
     if not os.path.isdir(node_dir):
         raise Http404("Node not found")
 
-    with open(metadata_file, "r") as file:
-        metadata = json.load(file)
-        rendering_method_name = metadata.get("rendering_method")
+    if os.path.isfile(metadata_file):
+        with open(metadata_file, "r") as file:
+            metadata = json.load(file)
+            rendering_method_name = metadata.get("rendering_method")
 
     main_file = None
     main_files = ["main.html", "main.md", "main.txt"]
