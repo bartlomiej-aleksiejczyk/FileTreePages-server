@@ -24,6 +24,7 @@ services:
     volumes:
       - .:/app
       - sqlite_data:/db
+      - nfs_data:/app/information_system
 
 volumes:
   sqlite_data:
