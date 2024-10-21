@@ -1,41 +1,67 @@
 import os
 import json
 from copy import deepcopy
-from django.http import HttpResponse, Http404
+from django.http import FileResponse, HttpResponse, Http404
 from django.shortcuts import render
 import markdown
 import nh3
 from .models import Node
 
+
 BASE_DIR = "information_system/"
 DEFAULT_RENDERING_METHOD = "txt_render"
+AUTOMATIC_RENDER_LOOKUP = {
+    "main.html": "html_safe_render",
+    "main.md": "markdown_render",
+    "main.txt": "txt_render",
+}
+
+
+# TODO: Fix path traversal vulnerability
+# TODO:
+def serve_node_file(request, node_path, file_name):
+    file_path_full = os.path.join(BASE_DIR, node_path, file_name)
+
+    print(file_path_full)
+    if not os.path.exists(file_path_full):
+        raise Http404("File not found")
+
+    return FileResponse(
+        open(file_path_full, "rb"), content_type="application/octet-stream"
+    )
+
+
+def render_node_with_query_handling(request, node_path=""):
+    file_name = request.GET.get("file")
+    if file_name:
+        return serve_node_file(request, node_path, file_name)
+    else:
+        return render_node(request, node_path)
+
+
+def load_file_or_404(node_dir, file_name, error_message):
+    file_path = os.path.join(node_dir, file_name)
+    if not os.path.exists(file_path):
+        raise Http404(error_message)
+    with open(file_path, "r") as file:
+        return file.read()
 
 
 def html_safe_render(node_dir, node_path, request):
     # TODO: disable classless css here if using for page archive
-    main_html_file = os.path.join(node_dir, "main.html")
 
-    if os.path.exists(main_html_file):
-        with open(main_html_file, "r") as file:
-            html_content = file.read()
-    else:
-        raise Http404("Main HTML file not found")
-
-    safe_html_content = nh3.clean(html_content)
+    safe_html_content = nh3.clean(
+        load_file_or_404(node_dir, "main.html", "Main HTML file not found")
+    )
 
     context = {"content": safe_html_content, "node_path": node_path}
     return render(request, "node_templates/html_node.html", context)
 
 
 def markdown_render(node_dir, node_path, request):
-    main_md_file = os.path.join(node_dir, "main.md")
-
-    if os.path.exists(main_md_file):
-        with open(main_md_file, "r") as file:
-            markdown_content = file.read()
-    else:
-        raise Http404("Main markdown file not found")
-
+    markdown_content = load_file_or_404(
+        node_dir, "main.md", "Main markdown file not found"
+    )
     md = markdown.Markdown(extensions=["mdx_wikilink_plus"])
     html_content = md.convert(markdown_content)
 
@@ -44,14 +70,8 @@ def markdown_render(node_dir, node_path, request):
 
 
 def txt_render(node_dir, node_path, request):
-    main_txt_file = os.path.join(node_dir, "main.txt")
-    if os.path.exists(main_txt_file):
-        with open(main_txt_file, "r") as file:
-            markdown_content = file.read()
-    else:
-        raise Http404("Main txt file not found")
-
-    context = {"content": markdown_content, "node_path": node_path}
+    txt_content = load_file_or_404(node_dir, "main.txt", "Main txt file not found")
+    context = {"content": txt_content, "node_path": node_path}
     return render(request, "node_templates/txt_node.html", context)
 
 
@@ -76,22 +96,20 @@ def render_node(request, node_path):
             rendering_method_name = metadata.get("rendering_method")
 
     main_file = None
-    main_files = ["main.html", "main.md", "main.txt"]
-    automatic_render_method_lookup = {
-        "main.html": "html_safe_render",
-        "main.md": "markdown_render",
-        "main.txt": "txt_render",
-    }
-    if rendering_method_name is None:
 
-        for file_name in main_files:
-            full_path = os.path.join(node_dir, file_name)
-            if os.path.isfile(full_path):
-                main_file = file_name
-                break
+    if rendering_method_name is None:
+        main_file = next(
+            (
+                file
+                for file in AUTOMATIC_RENDER_LOOKUP
+                if os.path.isfile(os.path.join(node_dir, file))
+            ),
+            None,
+        )
+
         if main_file is None:
             raise Http404("No main file found")
-        rendering_method_name = automatic_render_method_lookup[main_file]
+        rendering_method_name = AUTOMATIC_RENDER_LOOKUP[main_file]
 
     rendering_method = RENDERING_METHODS[rendering_method_name]
 
