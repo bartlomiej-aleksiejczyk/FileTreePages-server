@@ -54,8 +54,12 @@ def html_safe_render(node_dir, node_path, request):
         load_file_or_404(node_dir, "main.html", "Main HTML file not found")
     )
 
-    context = {"content": safe_html_content, "node_path": node_path}
-    return render(request, "node_templates/html_node.html", context)
+    context = {
+        "content": safe_html_content,
+        "node_path": node_path,
+        "base_dir": BASE_DIR,
+    }
+    return render(request, "node_templates/html_safe_node.html", context)
 
 
 def markdown_render(node_dir, node_path, request):
@@ -65,13 +69,21 @@ def markdown_render(node_dir, node_path, request):
     md = markdown.Markdown(extensions=["mdx_wikilink_plus"])
     html_content = md.convert(markdown_content)
 
-    context = {"content": html_content, "node_path": node_path}
-    return render(request, "node_templates/txt_node.html", context)
+    context = {
+        "content": html_content,
+        "node_path": node_path,
+        "base_dir": BASE_DIR,
+    }
+    return render(request, "node_templates/markdown_node.html", context)
 
 
 def txt_render(node_dir, node_path, request):
     txt_content = load_file_or_404(node_dir, "main.txt", "Main txt file not found")
-    context = {"content": txt_content, "node_path": node_path}
+    context = {
+        "content": txt_content,
+        "node_path": node_path,
+        "base_dir": BASE_DIR,
+    }
     return render(request, "node_templates/txt_node.html", context)
 
 

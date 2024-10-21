@@ -1,0 +1,8 @@
+<nav aria-label="breadcrumb">
+    <div class="breadcrumb">
+        <a href="/nodes/">Home</a>
+        {% if breadcrumbs %}
+            {% for crumb in breadcrumbs %}> <a href="/nodes/{{ crumb.path }}">{{ crumb.name }}</a>{% endfor %}
+        {% endif %}
+    </div>
+</nav>

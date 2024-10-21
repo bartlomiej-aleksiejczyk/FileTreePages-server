@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Node: {{ node_path }}</title>
-    </head>
-    <body>
-        <h1>Node: {{ node_path }}</h1>
-        <div class="content">{{ content|safe }}</div>
-    </body>
-</html>
+{% extends "full_navigation_node.html" %}
+{% block content %}
+    <div class="content">{{ content|safe }}</div>
+{% endblock content %}

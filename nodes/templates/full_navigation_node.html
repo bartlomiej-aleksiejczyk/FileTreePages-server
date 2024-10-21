@@ -1,0 +1,24 @@
+{% extends "base_node.html" %}
+{% load breadcrumb_tags %}
+{% load sidebar_tags %}
+{% block body %}
+    {% block sidebar %}
+        <aside>
+            <h3>Directory Tree</h3>
+            {% build_sidebar_navbar base_dir %}
+        </aside>
+    {% endblock sidebar %}
+    {% block header %}
+    {% endblock header %}
+    {% block navbar %}
+    {% endblock navbar %}
+    <main>
+        {% build_breadcrumbs node_path %}
+        {% block content %}
+        {% endblock content %}
+    </main>
+    {% block footer %}
+    {% endblock footer %}
+    {% block scripts %}
+    {% endblock scripts %}
+{% endblock body %}

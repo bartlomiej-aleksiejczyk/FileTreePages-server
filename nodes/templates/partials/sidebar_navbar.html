@@ -1,0 +1,20 @@
+<ul class="sidebar-navbar">
+    {% for name, node in tree.items %}
+        <li>
+            <strong>
+                {% if node.type == 'directory' %}
+                    <a href="/nodes/{{ node.path }}/">{{ name }}</a>
+                {% else %}
+                    <a href="/nodes/{{ node.path }}">{{ name }}</a>
+                {% endif %}
+            </strong>
+            {% if node.children %}
+                {% if node.type == 'directory' or node.type == 'root' %}
+                    <ul>
+                        {% include "partials/sidebar_navbar.html" with tree=node.children %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
