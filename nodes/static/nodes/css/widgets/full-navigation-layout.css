@@ -1,0 +1,36 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+.horizontal-body-container {
+  display: flex;
+  min-height: 100%;
+  flex-direction: row;
+}
+.navigation-layout__sidebar {
+  background-color: #e9ecef;
+  padding: 0rem 1rem;
+  overflow-y: auto;
+  height: inherit;
+}
+.navigation-layout__breadcrumbs {
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  max-height: 100%;
+}
+.navigation-layout__main-container {
+  flex-shrink: 6;
+  flex-grow: 1;
+}
+.navigation-layout__main-content {
+  padding: 3rem 1.5rem 0 3rem;
+}
+
+@media (max-width: 768px) {
+  .horizontal-body-container {
+    flex-direction: column;
+    height: auto;
+  }
+}

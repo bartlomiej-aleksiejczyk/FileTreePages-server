@@ -1,24 +1,31 @@
 {% extends "base_node.html" %}
+{% load static %}
 {% load breadcrumb_tags %}
 {% load sidebar_tags %}
 {% block body %}
-    {% block sidebar %}
-        <aside>
-            <h3>Directory Tree</h3>
-            {% build_sidebar_navbar base_dir %}
-        </aside>
-    {% endblock sidebar %}
     {% block header %}
+        <header>
+        </header>
     {% endblock header %}
-    {% block navbar %}
-    {% endblock navbar %}
-    <main>
-        {% build_breadcrumbs node_path %}
-        {% block content %}
-        {% endblock content %}
-    </main>
-    {% block footer %}
-    {% endblock footer %}
-    {% block scripts %}
-    {% endblock scripts %}
-{% endblock body %}
+    <div class="horizontal-body-container">
+        {% block sidebar %}
+            <aside class="navigation-layout__sidebar">
+                <h3>Directory Tree</h3>
+                {% build_sidebar_navbar base_dir %}
+            </aside>
+        {% endblock sidebar %}
+        {% block navbar %}
+        {% endblock navbar %}
+        <main class="navigation-layout__main-container">
+            <div class="navigation-layout__breadcrumbs">{% build_breadcrumbs node_path %}</div>
+            <div class="navigation-layout__main-content">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </main>
+        {% block footer %}
+        {% endblock footer %}
+        {% block scripts %}
+        {% endblock scripts %}
+        <div>
+        {% endblock body %}

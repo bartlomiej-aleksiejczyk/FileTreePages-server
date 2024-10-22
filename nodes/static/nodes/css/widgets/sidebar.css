@@ -1,0 +1,31 @@
+.sidebar-navbar {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-item {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-link a {
+  color: #343a40;
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.sidebar-link a:hover {
+  background-color: #ced4da;
+}
+
+.sidebar-submenu {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.sidebar-submenu .sidebar-item {
+  margin-bottom: 0.25rem;
+}

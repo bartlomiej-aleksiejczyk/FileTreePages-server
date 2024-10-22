@@ -1,0 +1,35 @@
+.breadcrumb-nav {
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›";
+  padding: 0 0.5rem;
+  color: #6c757d;
+}
+
+.breadcrumb-item a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb-nav {
+    padding: 0.5rem;
+  }
+
+  .breadcrumb-item a {
+    font-size: 0.9rem;
+  }
+}

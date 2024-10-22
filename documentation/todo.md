@@ -24,3 +24,5 @@
 ## Search module
 
 ## Analytics module
+
+## Diffing module

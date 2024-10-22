@@ -1,8 +1,14 @@
-<nav aria-label="breadcrumb">
-    <div class="breadcrumb">
-        <a href="/nodes/">Home</a>
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/nodes/">Home</a>
+        </li>
         {% if breadcrumbs %}
-            {% for crumb in breadcrumbs %}> <a href="/nodes/{{ crumb.path }}">{{ crumb.name }}</a>{% endfor %}
+            {% for crumb in breadcrumbs %}
+                <li class="breadcrumb-item">
+                    <a href="/nodes/{{ crumb.path }}">{{ crumb.name }}</a>
+                </li>
+            {% endfor %}
         {% endif %}
-    </div>
+    </ol>
 </nav>
