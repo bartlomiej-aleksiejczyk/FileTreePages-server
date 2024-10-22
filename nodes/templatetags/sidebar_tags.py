@@ -46,7 +46,6 @@ def traverse_directory(current_path, base_path):
 def build_sidebar_navbar(base_dir):
     """Build the sidebar tree structure starting from the provided base directory."""
     directory_tree = traverse_directory(base_dir, base_dir)
-    print(directory_tree)
 
     return {
         "tree": {

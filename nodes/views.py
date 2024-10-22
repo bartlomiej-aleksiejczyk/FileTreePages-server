@@ -22,7 +22,6 @@ AUTOMATIC_RENDER_LOOKUP = {
 def serve_node_file(request, node_path, file_name):
     file_path_full = os.path.join(BASE_DIR, node_path, file_name)
 
-    print(file_path_full)
     if not os.path.exists(file_path_full):
         raise Http404("File not found")
 
