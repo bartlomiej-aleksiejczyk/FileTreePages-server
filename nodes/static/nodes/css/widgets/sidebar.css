@@ -2,6 +2,8 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  position: sticky;
+  top: 0;
 }
 
 .sidebar-item {
@@ -9,7 +11,7 @@
 }
 
 .sidebar-link a {
-  color: #343a40;
+  color: var(--color-text-primary);
   text-decoration: none;
   display: block;
   padding: 0.25rem 0.5rem;
@@ -17,7 +19,7 @@
 }
 
 .sidebar-link a:hover {
-  background-color: #ced4da;
+  background-color: var(--color-secondary-darker);
 }
 
 .sidebar-submenu {
