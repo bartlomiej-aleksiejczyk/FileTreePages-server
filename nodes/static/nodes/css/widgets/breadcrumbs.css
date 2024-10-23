@@ -12,11 +12,13 @@
 .breadcrumb-item + .breadcrumb-item::before {
   content: "›";
   padding: 0 0.5rem;
-  color: #6c757d;
+}
+.breadcrumb-item:last-child {
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .breadcrumb-item a {
-  color: #007bff;
   text-decoration: none;
 }
 
