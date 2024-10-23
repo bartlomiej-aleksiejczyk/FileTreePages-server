@@ -3,31 +3,35 @@
 {% load breadcrumb_tags %}
 {% load sidebar_tags %}
 {% block body %}
-    {% block header %}
-        <header>
-        </header>
-    {% endblock header %}
-    <div class="horizontal-body-container">
-        {% block sidebar %}
-            <aside class="navigation-layout__sidebar">
-                <h3>Directory Tree</h3>
-                {% build_sidebar_navbar base_dir %}
-            </aside>
-        {% endblock sidebar %}
-        {% block navbar %}
-        {% endblock navbar %}
-        <div class="navigation-layout__main-container">
-            <div class="navigation-layout__breadcrumbs">{% build_breadcrumbs node_path %}</div>
-            <main>
-                <div class="navigation-layout__main-content">
-                    {% block content %}
-                    {% endblock content %}
+    <div class="outer_body_container">
+        {% block header %}
+            <header class="outer_body_container_topbar">
+                <div class="navbar">
+                    <p>TEST</p>
                 </div>
-            </main>
+            </header>
+        {% endblock header %}
+        <div class="horizontal-body-container">
+            {% block sidebar %}
+                <aside class="navigation-layout__sidebar">
+                    <h3>Directory Tree</h3>
+                    {% build_sidebar_navbar base_dir %}
+                </aside>
+            {% endblock sidebar %}
+            {% block navbar %}
+            {% endblock navbar %}
+            <div class="navigation-layout__main-container">
+                <div class="navigation-layout__breadcrumbs">{% build_breadcrumbs node_path %}</div>
+                <main>
+                    <div class="navigation-layout__main-content">
+                        {% block content %}
+                        {% endblock content %}
+                    </div>
+                </main>
+            </div>
+            {% block footer %}
+            {% endblock footer %}
+            {% block scripts %}
+            {% endblock scripts %}
         </div>
-        {% block footer %}
-        {% endblock footer %}
-        {% block scripts %}
-        {% endblock scripts %}
-        <div>
-        {% endblock body %}
+    {% endblock body %}
