@@ -23,12 +23,8 @@
                 {% endblock navbar %}
                 <div class="navigation-layout__main-container">
                     <div class="navigation-layout__breadcrumbs">{% build_breadcrumbs node_path %}</div>
-                    <main>
-                        <div class="navigation-layout__main-content">
-                            {% block content %}
-                            {% endblock content %}
-                        </div>
-                    </main>
+                        {% block content %}
+                        {% endblock content %}
                 </div>
             </div>
             {% block footer %}

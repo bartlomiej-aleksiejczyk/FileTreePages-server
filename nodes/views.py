@@ -1,7 +1,9 @@
 import os
 import json
+import mimetypes
 from copy import deepcopy
 from django.http import FileResponse, HttpResponse, Http404
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
 import markdown
 import nh3
@@ -19,15 +21,22 @@ AUTOMATIC_RENDER_LOOKUP = {
 
 # TODO: Fix path traversal vulnerability
 # TODO:
+@xframe_options_exempt
 def serve_node_file(request, node_path, file_name):
     file_path_full = os.path.join(BASE_DIR, node_path, file_name)
 
     if not os.path.exists(file_path_full):
         raise Http404("File not found")
 
-    return FileResponse(
-        open(file_path_full, "rb"), content_type="application/octet-stream"
-    )
+    mime_type, _ = mimetypes.guess_type(file_path_full)
+    mime_type = mime_type or "application/octet-stream"
+
+    response = FileResponse(open(file_path_full, "rb"), content_type=mime_type)
+
+    # Use urllib.parse.quote instead of urlquote for Django 4+
+    response["X-Frame-Options"] = "SAMEORIGIN"
+
+    return response
 
 
 def render_node_with_query_handling(request, node_path=""):
@@ -86,10 +95,31 @@ def txt_render(node_dir, node_path, request):
     return render(request, "node_templates/txt_node.html", context)
 
 
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+
+
+def html_unsafe_iframe_render(node_dir, node_path, request):
+    html_content = load_file_or_404(node_dir, "main.html", "Main html file not found")
+    context = {
+        "content": html_content,
+        "node_path": node_path,
+        "base_dir": BASE_DIR,
+    }
+    response = HttpResponse(
+        render_to_string("node_templates/html_unsafe_iframe_node.html", context)
+    )
+    response["X-Frame-Options"] = (
+        "ALLOW-FROM http://127.0.0.1"  # Change to your domain in production
+    )
+    return response
+
+
 RENDERING_METHODS = {
     "markdown_render": markdown_render,
     "txt_render": txt_render,
     "html_safe_render": html_safe_render,
+    "html_unsafe_iframe_render": html_unsafe_iframe_render,
 }
 
 

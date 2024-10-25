@@ -16,6 +16,7 @@ body {
   display: flex;
   flex: 1;
   flex-direction: row;
+  min-height: 100%;
 }
 .navigation-layout__sidebar {
   background-color: var(--color-secondary);
@@ -28,9 +29,17 @@ body {
 .navigation-layout__main-container {
   flex-shrink: 6;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 .navigation-layout__main-content {
   padding: 3rem 1.5rem 0 3rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.navigation-layout__main-content--iframe {
+  padding: 0;
 }
 
 @media (max-width: 768px) {
@@ -40,5 +49,6 @@ body {
   }
 }
 .navigation-layout_scrollable-area {
+  flex-grow: 1;
   overflow: auto;
 }
