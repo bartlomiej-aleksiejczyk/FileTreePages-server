@@ -7,7 +7,7 @@
         {% block header %}
             <header class="outer_body_container_topbar">
                 <div class="navbar">
-                    <p>TEST</p>
+                    <p class="topbar-title">FileTreePages</p>
                 </div>
             </header>
         {% endblock header %}
@@ -23,8 +23,8 @@
                 {% endblock navbar %}
                 <div class="navigation-layout__main-container">
                     <div class="navigation-layout__breadcrumbs">{% build_breadcrumbs node_path %}</div>
-                        {% block content %}
-                        {% endblock content %}
+                    {% block content %}
+                    {% endblock content %}
                 </div>
             </div>
             {% block footer %}
