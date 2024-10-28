@@ -20,6 +20,8 @@ body {
 }
 .horizontal-body-container__sidebar {
   background-color: var(--color-secondary);
+  max-width: 60%;
+  overflow: auto;
 }
 .main-column-container__breadcrumbs {
   padding: 0.75rem 1rem;
@@ -54,17 +56,14 @@ body {
   .navbar {
     height: 3.5rem;
   }
+  .horizontal-body-container__sidebar {
+    max-width: 100%;
+    overflow: auto;
+  }
 }
 .outer-body-container__scrollable-area {
   flex-grow: 1;
   overflow: auto;
 }
 
-.topbar-title {
-  font-size: 1.75rem;
-  font-weight: bold;
-  color: var(--color-text-on-primary);
-  font-family: "Oxanium";
-  letter-spacing: 2px;
-  margin: 0;
-}
+/* #TODO: Make sidebar resizable */
