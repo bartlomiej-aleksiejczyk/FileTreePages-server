@@ -56,7 +56,6 @@ def load_file_or_404(node_dir, file_name, error_message):
 
 
 def html_safe_render(node_dir, node_path, request):
-    # TODO: disable classless css here if using for page archive
 
     safe_html_content = nh3.clean(
         load_file_or_404(node_dir, "main.html", "Main HTML file not found")

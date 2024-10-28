@@ -31,7 +31,6 @@
 .sidebar-submenu .sidebar-item {
   margin-bottom: 0.25rem;
 }
-/* TODO: Tie breakpoints with css */
 @media (max-width: 768px) {
   .sidebar-navbar {
     position: static;
