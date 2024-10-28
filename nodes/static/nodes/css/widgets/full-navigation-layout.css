@@ -47,6 +47,13 @@ body {
     flex-direction: column;
     height: auto;
   }
+  .navigation-layout_scrollable-area {
+    flex-grow: 1;
+    overflow: visible;
+  }
+  .navbar {
+    height: 3.5rem;
+  }
 }
 .navigation-layout_scrollable-area {
   flex-grow: 1;
