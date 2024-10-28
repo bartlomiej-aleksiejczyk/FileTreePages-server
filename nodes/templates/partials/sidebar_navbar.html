@@ -1,7 +1,7 @@
 <ul class="sidebar-navbar">
     {% for name, node in tree.items %}
-        <li class="sidebar-item">
-            <span class="sidebar-link">
+        <li class="sidebar-navbar__item">
+            <span class="sidebar-navbar__link">
                 {% if node.type == 'directory' %}
                     <a href="/nodes/{{ node.path }}/">{{ name }}</a>
                 {% else %}
@@ -10,7 +10,7 @@
             </span>
             {% if node.children %}
                 {% if node.type == 'directory' or node.type == 'root' %}
-                    <ul class="sidebar-submenu">
+                    <ul class="sidebar-navbar__submenu">
                         {% include "partials/sidebar_navbar.html" with tree=node.children %}
                     </ul>
                 {% endif %}
