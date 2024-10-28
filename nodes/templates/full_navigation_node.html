@@ -3,26 +3,26 @@
 {% load breadcrumb_tags %}
 {% load sidebar_tags %}
 {% block body %}
-    <div class="outer_body_container">
+    <div class="outer-body-container">
         {% block header %}
-            <header class="outer_body_container_topbar">
+            <header class="outer-body-container__topbar">
                 <div class="navbar">
                     <p class="topbar-title">FileTreePages</p>
                 </div>
             </header>
         {% endblock header %}
-        <div class="navigation-layout_scrollable-area">
+        <div class="outer-body-container__scrollable-area">
             <div class="horizontal-body-container">
                 {% block sidebar %}
-                    <aside class="navigation-layout__sidebar tree-list-container">
+                    <aside class="horizontal-body-container__sidebar tree-list-container">
                         <h3>Directory Tree</h3>
                         {% build_sidebar_navbar base_dir %}
                     </aside>
                 {% endblock sidebar %}
                 {% block navbar %}
                 {% endblock navbar %}
-                <div class="navigation-layout__main-container">
-                    <div class="navigation-layout__breadcrumbs">{% build_breadcrumbs node_path %}</div>
+                <div class="main-column-container">
+                    <div class="main-column-container__breadcrumbs">{% build_breadcrumbs node_path %}</div>
                     {% block content %}
                     {% endblock content %}
                 </div>
