@@ -52,12 +52,12 @@ body {
   flex-grow: 1;
   overflow: auto;
 }
+
 .topbar-title {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: bold;
-  color: var(--color-text-on-primary)
-  -webkit-background-clip: text;
-  font-family: "Courier New", monospace;
+  color: var(--color-text-on-primary);
+  font-family: "Oxanium";
   letter-spacing: 2px;
   margin: 0;
 }
