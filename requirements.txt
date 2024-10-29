@@ -9,6 +9,9 @@ django-ipware==7.0.1
 h11==0.14.0
 huey==2.5.1
 Markdown==3.7
+markdown-checklist==0.4.4
+mdx-wikilink-plus==1.4.1
+nh3==0.2.18
 psycopg2-binary==2.9.9
 pycparser==2.22
 python-ipware==3.0.0
@@ -16,5 +19,3 @@ setuptools==70.0.0
 sqlparse==0.5.0
 uvicorn==0.30.6
 wheel==0.43.0
-nh3==0.2.18
-mdx-wikilink-plus==1.4.1

@@ -73,7 +73,9 @@ def markdown_render(node_dir, node_path, request):
     markdown_content = load_file_or_404(
         node_dir, "main.md", "Main markdown file not found"
     )
-    md = markdown.Markdown(extensions=["mdx_wikilink_plus"])
+    md = markdown.Markdown(
+        extensions=["mdx_wikilink_plus", "markdown_checklist.extension"]
+    )
     html_content = md.convert(markdown_content)
 
     context = {
