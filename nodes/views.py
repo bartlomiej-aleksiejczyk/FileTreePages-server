@@ -1,10 +1,12 @@
 import os
 import json
 import mimetypes
+import base64
 from copy import deepcopy
 from django.http import FileResponse, HttpResponse, Http404
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
+from django.template.loader import render_to_string
 import markdown
 import nh3
 from .models import Node
@@ -16,6 +18,7 @@ AUTOMATIC_RENDER_LOOKUP = {
     "main.html": "html_safe_render",
     "main.md": "markdown_render",
     "main.txt": "txt_render",
+    "main.enc": "encrypted_file_render",
 }
 
 
@@ -96,10 +99,6 @@ def txt_render(node_dir, node_path, request):
     return render(request, "node_templates/txt_node.html", context)
 
 
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-
-
 def html_unsafe_iframe_render(node_dir, node_path, request):
     html_content = load_file_or_404(node_dir, "main.html", "Main html file not found")
     context = {
@@ -116,11 +115,32 @@ def html_unsafe_iframe_render(node_dir, node_path, request):
     return response
 
 
+def encrypted_file_render(node_dir, node_path, request):
+    encrypted_file_path = os.path.join(node_dir, "main.enc")
+
+    if not os.path.exists(encrypted_file_path):
+        raise Http404("Encrypted file not found")
+
+    with open(encrypted_file_path, "rb") as f:
+        encrypted_content = f.read()
+
+    encrypted_content_base64_str = encrypted_content.decode("utf-8")
+
+    context = {
+        "encrypted_content_base64": encrypted_content_base64_str,
+        "node_path": node_path,
+        "base_dir": BASE_DIR,
+    }
+
+    return render(request, "node_templates/encrypted_file_node.html", context)
+
+
 RENDERING_METHODS = {
     "markdown_render": markdown_render,
     "txt_render": txt_render,
     "html_safe_render": html_safe_render,
     "html_unsafe_iframe_render": html_unsafe_iframe_render,
+    "encrypted_file_render": encrypted_file_render,
 }
 
 
