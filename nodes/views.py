@@ -109,25 +109,29 @@ def html_unsafe_iframe_render(node_dir, node_path, request):
     response = HttpResponse(
         render_to_string("node_templates/html_unsafe_iframe_node.html", context)
     )
-    response["X-Frame-Options"] = (
-        "ALLOW-FROM http://127.0.0.1"  # Change to your domain in production
+
+    return response
+
+# TODO: this method inserts whole html document into template there should be option to "merge" two documents
+def html_unsafe_render(node_dir, node_path, request):
+    html_content = load_file_or_404(node_dir, "main.html", "Main html file not found")
+    context = {
+        "content": html_content,
+        "node_path": node_path,
+        "base_dir": BASE_DIR,
+    }
+    response = HttpResponse(
+        render_to_string("node_templates/html_unsafe_node.html", context)
     )
     return response
 
-
 def encrypted_file_render(node_dir, node_path, request):
-    encrypted_file_path = os.path.join(node_dir, "main.enc")
-
-    if not os.path.exists(encrypted_file_path):
-        raise Http404("Encrypted file not found")
-
-    with open(encrypted_file_path, "rb") as f:
-        encrypted_content = f.read()
-
-    encrypted_content_base64_str = encrypted_content.decode("utf-8")
+    encrypted_content = load_file_or_404(
+        node_dir, "main.enc", "Main encrypted file not found"
+    )
 
     context = {
-        "encrypted_content_base64": encrypted_content_base64_str,
+        "encrypted_content_base64": encrypted_content,
         "node_path": node_path,
         "base_dir": BASE_DIR,
     }
@@ -139,6 +143,7 @@ RENDERING_METHODS = {
     "markdown_render": markdown_render,
     "txt_render": txt_render,
     "html_safe_render": html_safe_render,
+    "html_unsafe_render": html_unsafe_render,
     "html_unsafe_iframe_render": html_unsafe_iframe_render,
     "encrypted_file_render": encrypted_file_render,
 }
