@@ -151,6 +151,7 @@ RENDERING_METHODS = {
 }
 
 
+# TODO: Handle broken metadata
 def render_node(request, node_path):
     node_dir = os.path.join(settings.PAGES_BASE_DIR, node_path)
     metadata_file = os.path.join(node_dir, "metadata.json")
