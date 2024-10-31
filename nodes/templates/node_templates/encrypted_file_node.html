@@ -1,24 +1,23 @@
 {% extends "full_navigation_node.html" %}
 {% block content %}
-    <main class="main-column-container__node-content">
-        <div>
-            <h1>Encrypted Content</h1>
-            <div id="decryption-interface">
-                <p>Please enter the password to decrypt the content:</p>
-                <input type="password" id="passwordInput" />
-                <button id="decryptButton">Decrypt</button>
-            </div>
-            <div id="contentDisplay"></div>
-            <script type="module">
+  <main class="main-column-container__node-content">
+    <div>
+      <h1>Encrypted Content</h1>
+      <div id="decryption-interface">
+        <p>Please enter the password to decrypt the content:</p>
+        <input type="password" id="passwordInput" />
+        <button id="decryptButton">Decrypt</button>
+      </div>
+      <div id="contentDisplay"></div>
+      <script type="module">
                 import crypto from 'https://cdn.jsdelivr.net/npm/crypto-browserify@3.12.0/+esm';
                 import { Buffer } from 'https://cdn.jsdelivr.net/npm/buffer@6.0.3/+esm';
-            
+        
                 const encryptedContentBase64 = "{{ encrypted_content_base64|escapejs }}";
                 async function decryptContent() {
-                    const encryptedBase64 = encryptedContentBase64;
                     const password = document.getElementById("passwordInput").value;
             
-                    if (!encryptedBase64) {
+                    if (!encryptedContentBase64) {
                       alert("Please enter encrypted text to decrypt.");
                       return;
                     }
@@ -28,38 +27,36 @@
                     }
             
                     try {
-                      const encryptedData = Buffer.from(encryptedBase64, "base64");
+                      const encryptedData = Buffer.from(encryptedContentBase64, "base64");
+            
+                      const nonce = encryptedData.slice(0, 12);
+                      const authTag = encryptedData.slice(encryptedData.length - 16);
+                      const ciphertext = encryptedData.slice(12, encryptedData.length - 16);
             
                       const key = crypto.createHash("sha256").update(password).digest();
             
-                      const decipher = crypto.createDecipheriv(
-                        "aes-256-ecb",
-                        key,
-                        Buffer.alloc(0)
-                      );
-                      decipher.setAutoPadding(true);
+                      const decipher = crypto.createDecipheriv("aes-256-gcm", key, nonce);
+                      decipher.setAuthTag(authTag);
             
-                      let decrypted = decipher.update(encryptedData);
+                      let decrypted = decipher.update(ciphertext);
                       decrypted = Buffer.concat([decrypted, decipher.final()]);
             
                       const decryptedPlaintext = decrypted.toString("utf-8");
             
-                      if (!decryptedPlaintext) {
-                        throw new Error("Invalid password or corrupted data.");
-                      }
                       document.getElementById("decryption-interface").remove();
                       const preElement = document.createElement("pre");
                       const codeElement = document.createElement("code");   
                       codeElement.textContent = decryptedPlaintext;
                       preElement.appendChild(codeElement);
                       document.getElementById("contentDisplay").appendChild(preElement);
+
                     } catch (e) {
                       alert("Failed to decrypt content: " + e.message);
+                      document.getElementById("decryptedDisplay").textContent = "N/A";
                     }
                   }
-            
                 document.getElementById("decryptButton").addEventListener("click", decryptContent);
-            </script>
-        </div>
-    </main>
+      </script>
+    </div>
+  </main>
 {% endblock content %}
