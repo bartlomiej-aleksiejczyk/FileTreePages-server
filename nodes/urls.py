@@ -1,12 +1,17 @@
 from django.urls import path
-from . import views
+from .views.general_views import render_node_with_query_handling
 
 # TODO: Add handling for absolute links.
 urlpatterns = [
-    path("nodes/", views.render_node, {"node_path": ""}, name="render_root_node"),
+    path(
+        "nodes/",
+        render_node_with_query_handling,
+        {"node_path": ""},
+        name="render_root_node",
+    ),
     path(
         "nodes/<path:node_path>/",
-        views.render_node_with_query_handling,
+        render_node_with_query_handling,
         name="render_node",
     ),
 ]

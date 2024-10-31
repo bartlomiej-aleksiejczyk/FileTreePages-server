@@ -1,18 +1,23 @@
 import os
 import json
 import mimetypes
-import base64
-from copy import deepcopy
-from django.http import FileResponse, HttpResponse, Http404
+import markdown
+import nh3
+from django.http import (
+    FileResponse,
+    HttpResponse,
+    Http404,
+    HttpResponseNotAllowed,
+)
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
 from django.template.loader import render_to_string
-import markdown
-import nh3
-from .models import Node
+
+from django.conf import settings
+from .view_file_handlers import load_file_or_404
+from .editable_context_views import editable_context_view
 
 
-BASE_DIR = "information_system/"
 DEFAULT_RENDERING_METHOD = "txt_render"
 AUTOMATIC_RENDER_LOOKUP = {
     "main.html": "html_safe_render",
@@ -26,7 +31,7 @@ AUTOMATIC_RENDER_LOOKUP = {
 # TODO: Separate generic download and download with MIME type detection
 @xframe_options_exempt
 def serve_node_file(request, node_path, file_name):
-    file_path_full = os.path.join(BASE_DIR, node_path, file_name)
+    file_path_full = os.path.join(settings.PAGES_BASE_DIR, node_path, file_name)
 
     if not os.path.exists(file_path_full):
         raise Http404("File not found")
@@ -44,18 +49,13 @@ def serve_node_file(request, node_path, file_name):
 
 def render_node_with_query_handling(request, node_path=""):
     file_name = request.GET.get("file")
+    if request.method == "POST":
+        return editable_context_view(request, node_path)
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET", "POST"])
     if file_name:
         return serve_node_file(request, node_path, file_name)
-    else:
-        return render_node(request, node_path)
-
-
-def load_file_or_404(node_dir, file_name, error_message):
-    file_path = os.path.join(node_dir, file_name)
-    if not os.path.exists(file_path):
-        raise Http404(error_message)
-    with open(file_path, "r") as file:
-        return file.read()
+    return render_node(request, node_path)
 
 
 def html_safe_render(node_dir, node_path, request):
@@ -67,7 +67,7 @@ def html_safe_render(node_dir, node_path, request):
     context = {
         "content": safe_html_content,
         "node_path": node_path,
-        "base_dir": BASE_DIR,
+        "base_dir": settings.PAGES_BASE_DIR,
     }
     return render(request, "node_templates/html_safe_node.html", context)
 
@@ -84,7 +84,7 @@ def markdown_render(node_dir, node_path, request):
     context = {
         "content": html_content,
         "node_path": node_path,
-        "base_dir": BASE_DIR,
+        "base_dir": settings.PAGES_BASE_DIR,
     }
     return render(request, "node_templates/markdown_node.html", context)
 
@@ -94,7 +94,7 @@ def txt_render(node_dir, node_path, request):
     context = {
         "content": txt_content,
         "node_path": node_path,
-        "base_dir": BASE_DIR,
+        "base_dir": settings.PAGES_BASE_DIR,
     }
     return render(request, "node_templates/txt_node.html", context)
 
@@ -104,7 +104,7 @@ def html_unsafe_iframe_render(node_dir, node_path, request):
     context = {
         "content": html_content,
         "node_path": node_path,
-        "base_dir": BASE_DIR,
+        "base_dir": settings.PAGES_BASE_DIR,
     }
     response = HttpResponse(
         render_to_string("node_templates/html_unsafe_iframe_node.html", context)
@@ -112,18 +112,20 @@ def html_unsafe_iframe_render(node_dir, node_path, request):
 
     return response
 
+
 # TODO: this method inserts whole html document into template there should be option to "merge" two documents
 def html_unsafe_render(node_dir, node_path, request):
     html_content = load_file_or_404(node_dir, "main.html", "Main html file not found")
     context = {
         "content": html_content,
         "node_path": node_path,
-        "base_dir": BASE_DIR,
+        "base_dir": settings.PAGES_BASE_DIR,
     }
     response = HttpResponse(
         render_to_string("node_templates/html_unsafe_node.html", context)
     )
     return response
+
 
 def encrypted_file_render(node_dir, node_path, request):
     encrypted_content = load_file_or_404(
@@ -133,7 +135,7 @@ def encrypted_file_render(node_dir, node_path, request):
     context = {
         "encrypted_content_base64": encrypted_content,
         "node_path": node_path,
-        "base_dir": BASE_DIR,
+        "base_dir": settings.PAGES_BASE_DIR,
     }
 
     return render(request, "node_templates/encrypted_file_node.html", context)
@@ -150,7 +152,7 @@ RENDERING_METHODS = {
 
 
 def render_node(request, node_path):
-    node_dir = os.path.join(BASE_DIR, node_path)
+    node_dir = os.path.join(settings.PAGES_BASE_DIR, node_path)
     metadata_file = os.path.join(node_dir, "metadata.json")
     rendering_method_name = None
 

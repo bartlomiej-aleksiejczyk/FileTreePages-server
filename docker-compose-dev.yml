@@ -20,6 +20,7 @@ services:
       DJANGO_SECRET_KEY: "your-secret-key-here"
       DEBUG: "True"
       ALLOWED_HOSTS: "localhost,192.168.0.29,0.0.0.0,127.0.0.1,[::1]"
+      PAGES_BASE_DIR: "information_system/"
 
     volumes:
       - .:/app

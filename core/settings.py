@@ -189,3 +189,4 @@ LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 AXES_COOLOFF_TIME = 0.1
+PAGES_BASE_DIR = os.getenv("PAGES_BASE_DIR", "information_system/")
