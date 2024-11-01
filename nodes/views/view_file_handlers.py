@@ -4,7 +4,6 @@ from contextlib import contextmanager
 from django.http import (
     Http404,
 )
-from django.conf import settings
 
 if os.name == "posix":
     import fcntl

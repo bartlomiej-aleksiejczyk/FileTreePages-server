@@ -1,3 +1,4 @@
+#TODO: Investigate long stopping/killing time of django container
 services:
   django:
     build:
@@ -22,6 +23,22 @@ services:
       ALLOWED_HOSTS: "localhost,192.168.0.29,0.0.0.0,127.0.0.1,[::1]"
       PAGES_BASE_DIR: "information_system/"
 
+    volumes:
+      - .:/app
+      - sqlite_data:/db
+      - nfs_data:/app/information_system
+
+  resilient_worker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    depends_on:
+      - django
+    command: >
+      bash -c "while true; do
+                 python manage.py watch_files_for_change;
+                 sleep 3600;
+               done"
     volumes:
       - .:/app
       - sqlite_data:/db
