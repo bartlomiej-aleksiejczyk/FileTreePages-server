@@ -21,7 +21,7 @@ This template includes:
 **Local development version:**
 
 ```
-docker-compose -f docker-compose-dev.yml up
+docker compose -f docker-compose-dev.yml up
 ```
 
 **Production version:**
@@ -42,5 +42,7 @@ examples:
 docker compose -f docker-compose-dev.yml exec django pip freeze > requirements.txt
 docker compose -f docker-compose-dev.yml exec django pip install requests==2.32.3
 ```
+
 ## Template URL
+
 https://github.com/bartlomiej-aleksiejczyk/django-template-copier
